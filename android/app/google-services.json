@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "357230302514",
+    "project_id": "rexparts-3f9df",
+    "storage_bucket": "rexparts-3f9df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357230302514:android:7da0fcd5a54d2690fc732b",
+        "android_client_info": {
+          "package_name": "com.example.rexparts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357230302514-1e9q2sbt4st1tka4il3dftpa988bef75.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTSDECtXs1LrfKM_3MY8flQUi4g6oa-oA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357230302514-1e9q2sbt4st1tka4il3dftpa988bef75.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "357230302514-dnvcff1c9i17rs4nkj1cf35thp18bjuc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spareParts"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357230302514:android:19f742e0e407d803fc732b",
+        "android_client_info": {
+          "package_name": "com.example.spare_parts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357230302514-9tgjhn89a92okhrfjsu39lhvum9781bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.spare_parts",
+            "certificate_hash": "984af96a5dd6af3705018d569c847f71a1489036"
+          }
+        },
+        {
+          "client_id": "357230302514-1e9q2sbt4st1tka4il3dftpa988bef75.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTSDECtXs1LrfKM_3MY8flQUi4g6oa-oA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357230302514-1e9q2sbt4st1tka4il3dftpa988bef75.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "357230302514-dnvcff1c9i17rs4nkj1cf35thp18bjuc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spareParts"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
