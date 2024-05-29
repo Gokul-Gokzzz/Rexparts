@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:rexparts/controller/login_provider.dart';
-import 'package:rexparts/model/user_model.dart';
+// import 'package:provider/provider.dart';
+// import 'package:rexparts/controller/user_controller.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -21,7 +18,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    // final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -66,15 +63,14 @@ class _AccountScreenState extends State<AccountScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'N/A',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                   ),
-                  const Icon(Icons.edit)
+                  Icon(Icons.edit)
                 ],
               ),
               const SizedBox(
@@ -94,18 +90,18 @@ class _AccountScreenState extends State<AccountScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'N/A',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 17,
                       color: Colors.blue,
                     ),
                   ),
-                  const Icon(Icons.edit)
+                  Icon(Icons.edit)
                 ],
               ),
               const SizedBox(

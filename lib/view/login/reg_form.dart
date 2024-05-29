@@ -1,9 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rexparts/controller/login_provider.dart';
 import 'package:rexparts/controller/reg_provider.dart';
-import 'package:rexparts/controller/user_controller.dart';
-import 'package:rexparts/model/user_model.dart';
+import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
+import 'package:rexparts/widget/popup_widget.dart';
+// import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({super.key});
@@ -11,7 +13,7 @@ class RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final regProvider = Provider.of<RegProvider>(context, listen: false);
+    final regProvider = Provider.of<LoginProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -33,9 +35,13 @@ class RegisterForm extends StatelessWidget {
                             }
                             return null;
                           },
-                          controller: regProvider.nameController,
+                          controller: regProvider.userNameController,
                           decoration: const InputDecoration(
-                              label: Text('Enter Full Name')),
+                              label: Text('Enter Full Name'),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Icon(Icons.person),
+                              )),
                         ),
                       ),
                       Padding(
@@ -49,7 +55,12 @@ class RegisterForm extends StatelessWidget {
                           },
                           controller: regProvider.emailController,
                           decoration: const InputDecoration(
-                              label: Text('Enter Email Address')),
+                            label: Text('Enter Email Address'),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Icon(Icons.email),
+                            ),
+                          ),
                         ),
                       ),
                       Consumer<RegProvider>(
@@ -58,7 +69,7 @@ class RegisterForm extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
-                                obscureText: !value.passwordVisible,
+                                obscureText: value.createObscureText,
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Enter Password';
@@ -67,15 +78,20 @@ class RegisterForm extends StatelessWidget {
                                 },
                                 controller: regProvider.passwordController,
                                 decoration: InputDecoration(
+                                  prefixIcon: const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    child: Icon(Icons.password),
+                                  ),
                                   suffixIcon: IconButton(
                                     onPressed: () {
-                                      value.togglePasswordVisibility();
+                                      value.createObscureChange();
                                     },
-                                    icon: Icon(value.passwordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
+                                    icon: Icon(value.createObscureText
+                                        ? EneftyIcons.eye_slash_outline
+                                        : EneftyIcons.eye_outline),
                                   ),
-                                  label: Text(
+                                  label: const Text(
                                     'Enter Password',
                                   ),
                                 ),
@@ -84,6 +100,7 @@ class RegisterForm extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
+                                obscureText: value.conformObscureText,
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Conform Password';
@@ -91,17 +108,22 @@ class RegisterForm extends StatelessWidget {
                                   return null;
                                 },
                                 controller:
-                                    regProvider.conformPasswordController,
+                                    regProvider.confirmPasswordController,
                                 decoration: InputDecoration(
+                                  prefixIcon: const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    child: Icon(Icons.password_rounded),
+                                  ),
                                   suffixIcon: IconButton(
                                     onPressed: () {
-                                      value.togglePasswordVisibility();
+                                      value.conformObscureChange();
                                     },
-                                    icon: Icon(value.passwordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
+                                    icon: Icon(value.conformObscureText
+                                        ? EneftyIcons.eye_slash_outline
+                                        : EneftyIcons.eye_outline),
                                   ),
-                                  label: Text('Conform Password'),
+                                  label: const Text('Conform Password'),
                                 ),
                               ),
                             ),
@@ -126,15 +148,23 @@ class RegisterForm extends StatelessWidget {
                             //     MaterialPageRoute(
                             //         builder: (context) => BottomNavBar()));
                             if (formKey.currentState!.validate()) {
-                              await regProvider.signUp(context);
-                              UserModel user = UserModel(
-                                  uid: FirebaseAuth.instance.currentUser!.uid,
-                                  email:
-                                      regProvider.emailController.text.trim(),
-                                  name: regProvider.nameController.text.trim());
-                              Provider.of<UserProvider>(context, listen: false)
-                                  .addUser(user);
-                              // value.clear();
+                              try {
+                                regProvider.signUpWithEmail(
+                                    regProvider.emailController.text,
+                                    regProvider.passwordController.text);
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => BottomNavBar(),
+                                  ),
+                                  (Route<dynamic> route) => false,
+                                );
+                                PopupWidgets().showSuccessSnackbar(
+                                    context, 'Account has been created');
+                                regProvider.clearControllers();
+                              } catch (e) {
+                                PopupWidgets().showErrorSnackbar(
+                                    context, 'Account not created, try again');
+                              }
                             }
                           },
                           child: const Text(

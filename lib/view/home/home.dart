@@ -19,6 +19,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final List products = [
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '10%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '20%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '15%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '25%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '15%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '25%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '15%'},
+      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '25%'},
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -41,9 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               slide(carouselimage: slider, height: 200),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -94,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const Text(
-                        'Favourits',
+                        'Favourites',
                         style: TextStyle(
                           color: Colors.blue,
                         ),
@@ -103,100 +112,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               const Text(
-                'Suggestions',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                'Popular',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '10%',
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: GridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 0.75,
                   ),
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '20%',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '15%',
-                  ),
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '25%',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '15%',
-                  ),
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '25%',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '15%',
-                  ),
-                  productContainer(
-                    context: context,
-                    page: const TireDetailPage(),
-                    size: size,
-                    image: 'assets/slide2.png',
-                    name: 'Engine',
-                    discountPercentage: '25%',
-                  ),
-                ],
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    return productContainer(
+                      context: context,
+                      page: const TireDetailPage(),
+                      size: size,
+                      image: products[index]['image']!,
+                      name: products[index]['name']!,
+                      discountPercentage: products[index]['discount']!,
+                    );
+                  },
+                ),
               ),
             ],
           ),

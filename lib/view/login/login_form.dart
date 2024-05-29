@@ -1,6 +1,14 @@
+// ignore_for_file: avoid_unnecessary_containers, use_build_context_synchronously
+
+import 'package:email_validator/email_validator.dart';
+import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
+import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
+import 'package:rexparts/view/login/forgot_password.dart';
+import 'package:rexparts/view/login/phone_auth.dart';
+import 'package:rexparts/widget/popup_widget.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -24,69 +32,73 @@ class LoginForm extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      controller: loginProvider.emailControler,
+                      controller: loginProvider.emailController,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Enter Email";
+                          return " Please Enter  Email";
+                        } else if (!EmailValidator.validate(value)) {
+                          return "Please Enter a valid  Email Address ";
                         }
                         return null;
                       },
-                      decoration: InputDecoration(
-                        label: const Text('Email Address'),
+                      decoration: const InputDecoration(
+                        label: Text('Email Address'),
                         prefixIcon: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                          ),
-                          child: Image.asset(
-                            'assets/login1.png',
-                            height: 24,
-                            width: 24,
-                          ),
-                        ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            child: Icon(Icons.email)),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Consumer<LoginProvider>(
-                      builder: (context, value, child) => TextFormField(
-                        controller: loginProvider.passwordControler,
-                        obscureText: !value.passwordVisible,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Enter Password";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          label: const Text('Password'),
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
+                    child: Column(children: [
+                      Consumer<LoginProvider>(
+                        builder: (context, value, child) => TextFormField(
+                          controller: loginProvider.passwordController,
+                          obscureText: value.signInObscureText,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Enter Password ";
+                            } else if (value.length <= 6) {
+                              return "Enter Password Atleast 6 ";
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            label: const Text('Password'),
+                            prefixIcon: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Icon(Icons.password)),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                value.signInObscureChange();
+                              },
+                              icon: Icon(value.signInObscureText
+                                  ? EneftyIcons.eye_slash_outline
+                                  : EneftyIcons.eye_outline),
                             ),
-                            child: Image.asset(
-                              'assets/login2.png',
-                              height: 24,
-                              width: 24,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              value.togglePasswordVisibility();
-                            },
-                            icon: Icon(value.passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off),
                           ),
                         ),
                       ),
-                    ),
+                    ]),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordScreen(),
+                            ),
+                          );
+                        },
                         child: const Text(
                           'Forgot password?',
                           style: TextStyle(
@@ -107,10 +119,24 @@ class LoginForm extends StatelessWidget {
                         50,
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        loginProvider.signInWithEmailAndPassword(context);
-                        loginProvider.clear();
+                        try {
+                          await loginProvider.signInWithEmail(
+                              loginProvider.emailController.text,
+                              loginProvider.passwordController.text);
+                          PopupWidgets()
+                              .showSuccessSnackbar(context, 'User logged in');
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BottomNavBar()));
+                          loginProvider.clearControllers();
+                        } catch (e) {
+                          loginProvider.clearControllers();
+                          PopupWidgets()
+                              .showErrorSnackbar(context, 'User not found!');
+                        }
                       }
                     },
                     child: const Text(
@@ -149,7 +175,7 @@ class LoginForm extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            value.signInWithGoogle(context);
+                            value.googleSignIn(context);
                           },
                           child: Container(
                             child: Image.asset(
@@ -158,10 +184,18 @@ class LoginForm extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          child: Image.asset(
-                            'assets/facebook.png',
-                            height: 30,
+                        GestureDetector(
+                          onTap: () {
+                            loginProvider.clearControllers();
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => OtpPage(),
+                            ));
+                          },
+                          child: Container(
+                            child: Image.asset(
+                              'assets/phone1.png',
+                              height: 30,
+                            ),
                           ),
                         ),
                       ],

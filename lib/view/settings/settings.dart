@@ -1,12 +1,14 @@
-import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:rexparts/controller/login_provider.dart';
+
 import 'package:rexparts/view/account/account.dart';
 import 'package:rexparts/view/help/help.dart';
-import 'package:rexparts/view/login/login.dart';
 import 'package:rexparts/view/order/order.dart';
 import 'package:rexparts/view/terms_condition/terms_condition.dart';
+import 'package:rexparts/widget/log_out_snakbar.dart';
 import 'package:rexparts/widget/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final logoutProvider = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -72,7 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(
                 height: 30,
               ),
-              buildShadowedListTile('Orders', () {
+              textWidget('Orders', () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -80,7 +83,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 );
               }),
-              buildShadowedListTile('Account Information', () {
+              textWidget('Account Information', () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -88,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 );
               }),
-              buildShadowedListTile('Terms And Condition ', () {
+              textWidget('Terms And Condition ', () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -96,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 );
               }),
-              buildShadowedListTile('Help', () {
+              textWidget('Help', () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -104,15 +107,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 );
               }),
-              buildShadowedListTile('Logout', () async {
-                await GoogleSignIn().signOut();
-                log('message');
-                FirebaseAuth.instance.signOut();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false,
-                );
+              textWidget('Logout', () async {
+                confirmationDialog(context, logoutProvider);
               }),
             ],
           ),

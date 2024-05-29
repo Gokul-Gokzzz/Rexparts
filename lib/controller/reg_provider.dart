@@ -73,4 +73,16 @@ class RegProvider extends ChangeNotifier {
     passwordController.clear();
     conformPasswordController.clear();
   }
+
+  bool createObscureText = true;
+  void createObscureChange() {
+    createObscureText = !createObscureText;
+    notifyListeners();
+  }
+
+  bool conformObscureText = true;
+  void conformObscureChange() {
+    conformObscureText = !conformObscureText;
+    notifyListeners();
+  }
 }

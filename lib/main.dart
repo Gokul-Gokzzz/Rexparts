@@ -5,7 +5,7 @@ import 'package:rexparts/controller/bottom_provider.dart';
 import 'package:rexparts/controller/carsoul_provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
 import 'package:rexparts/controller/reg_provider.dart';
-import 'package:rexparts/controller/user_controller.dart';
+// import 'package:rexparts/controller/user_controller.dart';
 import 'package:rexparts/firebase_options.dart';
 import 'package:rexparts/view/splash_screen/splash_screen.dart';
 
@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => BottomNavProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => UserProvider(),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (context) => UserProvider(),
+        // ),
         ChangeNotifierProvider(
           create: (context) => LoginProvider(),
         ),

@@ -1,78 +1,114 @@
 import 'dart:developer';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rexparts/model/user_model.dart';
 import 'package:rexparts/service/auth_service.dart';
-import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
-
-// Import your bottom bar screen
 
 class LoginProvider extends ChangeNotifier {
-  final TextEditingController emailControler = TextEditingController();
-  final TextEditingController passwordControler = TextEditingController();
-  final AuthenticationService authenticationService = AuthenticationService();
-  bool passwordVisible = false;
+  final AuthService authService = AuthService();
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  final forgotPasswordFormkey = GlobalKey<FormState>();
+  int currentIndex = 0;
+  UserModel? currentUser;
+  bool showPassword = true;
+  bool showOtpField = false;
+  Country selectCountry = Country(
+      phoneCode: '91',
+      countryCode: "IN",
+      e164Sc: 0,
+      geographic: true,
+      level: 1,
+      name: "INDIA",
+      example: "INDIA",
+      displayName: "INDIA",
+      displayNameNoCountryCode: "IN",
+      e164Key: "");
 
-  void togglePasswordVisibility() {
-    passwordVisible = !passwordVisible;
+  Future<UserCredential> signUpWithEmail(String email, String password) async {
+    return await authService.signUpWithEmail(email, password);
+  }
+
+  Future<UserCredential> signInWithEmail(String email, String password) async {
+    return await authService.signInWithEmail(email, password);
+  }
+
+  Future<void> signOutWithEmail() async {
+    return await authService.signOutEmail();
+  }
+
+  Future<void> googleSignIn(BuildContext context) async {
+    try {
+      await authService.signInWithGoogle(context);
+      notifyListeners();
+    } catch (e) {
+      notifyListeners();
+    }
+  }
+
+  Future<void> googleSignOut() async {
+    await GoogleSignIn().signOut();
+    FirebaseAuth.instance.signOut();
     notifyListeners();
   }
 
-  void signInWithEmailAndPassword(BuildContext context) async {
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
-    try {
-      await authenticationService.signInWithEmailAndPassword(
-          emailControler.text, passwordControler.text);
-
-      if (context.mounted) Navigator.pop(context);
-
-      // Navigate to the bottom bar screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                BottomNavBar()), // Replace with your bottom bar screen
-      );
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      displayMessage(e.code, context);
+  Future<void> getUser() async {
+    currentUser = await authService.getCurrentUser();
+    if (currentUser != null) {
+      log(currentUser!.email!);
     }
+    notifyListeners();
   }
 
-  Future<void> signInWithGoogle(BuildContext context) async {
-    try {
-      await authenticationService.signInWithGoogle();
-      notifyListeners();
-
-      // Navigate to the bottom bar screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNavBar()),
-      );
-    } catch (e) {
-      log(e.toString());
-      displayMessage(e.toString(), context);
-    }
+  bool signInObscureText = true;
+  void signInObscureChange() {
+    signInObscureText = !signInObscureText;
+    notifyListeners();
   }
 
-  void displayMessage(String message, BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(message),
-      ),
-    );
+  Future<void> getOtp(phoneNumber) async {
+    await authService.getOtp(phoneNumber);
+    notifyListeners();
   }
 
-  void clear() {
-    emailControler.clear();
-    passwordControler.clear();
+  Future<void> verifyOtp(otp, context) async {
+    await authService.verifyOtp(otp, context);
+    notifyListeners();
+  }
+
+  countrySelection(value) {
+    selectCountry = value;
+    notifyListeners();
+  }
+
+  Future<void> showOtp() async {
+    showOtpField = true;
+    notifyListeners();
+  }
+
+  Future clearControllers() async {
+    userNameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    phoneController.clear();
+    otpController.clear();
+    notifyListeners();
+  }
+
+  onTabTapped(int index) {
+    currentIndex = index;
+    notifyListeners();
+  }
+
+  Future<void> forgotPassword(context, {email}) async {
+    authService.passwordReset(email: email, context: context);
   }
 }

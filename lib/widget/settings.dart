@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buildShadowedListTile(String title, Function()? onTap) {
+Widget textWidget(String title, Function()? onTap) {
   return GestureDetector(
     onTap: onTap,
     child: Container(

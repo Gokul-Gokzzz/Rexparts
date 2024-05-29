@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rexparts/view/login/login.dart';
+import 'package:rexparts/view/auth_screen/auth_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -53,7 +53,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
+                          builder: (context) => const AuthPage(),
                         ),
                       );
                     },

@@ -68,16 +68,21 @@ class _CartPageState extends State<CartPage> {
               },
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: Column(
-          //     children: [
-          //       Text('Subtotal: \$${subtotal.toStringAsFixed(2)}'),
-          //       Text('Total: \$${total.toStringAsFixed(2)}'),
-          //       SizedBox(height: 20),
-          //     ],
-          //   ),
-          // ),
+          Container(
+            height: 40,
+            width: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: const Color.fromARGB(255, 255, 255, 255)),
+            child: const Center(
+                child: Text(
+              'Buy',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+          ),
+          const SizedBox(
+            height: 30,
+          )
         ],
       ),
     );
