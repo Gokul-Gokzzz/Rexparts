@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rexparts/controller/admin_controller.dart';
 import 'package:rexparts/controller/bottom_provider.dart';
 import 'package:rexparts/controller/carsoul_provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
@@ -30,9 +31,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => BottomNavProvider(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (context) => UserProvider(),
-        // ),
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(),
+        ),
         ChangeNotifierProvider(
           create: (context) => LoginProvider(),
         ),

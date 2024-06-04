@@ -1,62 +1,38 @@
-// ignore_for_file: library_private_types_in_public_api
-
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:rexparts/model/product_model.dart';
+import 'package:provider/provider.dart';
+import 'package:rexparts/controller/admin_controller.dart';
+import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/view/tyre_details/tyre_details.dart';
-import 'package:rexparts/widget/tyre_card.dart';
 
 class TyreScreen extends StatefulWidget {
-  const TyreScreen({super.key});
+  final String? category;
+  const TyreScreen({Key? key, this.category}) : super(key: key);
 
   @override
-  _CategoryPageState createState() => _CategoryPageState();
+  _TyreScreenState createState() => _TyreScreenState();
 }
 
-class _CategoryPageState extends State<TyreScreen> {
-  List<Product> products = [
-    Product(
-      imageUrl: 'assets/tyre.png',
-      name: 'Product 1',
-      price: 29.99,
-    ),
-    Product(
-      imageUrl: 'assets/tyre.png',
-      name: 'Product 2',
-      price: 49.99,
-    ),
-    Product(
-      imageUrl: 'assets/tyre.png',
-      name: 'Product 2',
-      price: 49.99,
-    ),
-    Product(
-      imageUrl: 'assets/tyre.png',
-      name: 'Product 2',
-      price: 49.99,
-    ),
-    Product(
-      imageUrl: 'assets/tyre.png',
-      name: 'Product 2',
-      price: 49.99,
-    ),
-    Product(
-      imageUrl: 'assets/tyre.png',
-      name: 'Product 2',
-      price: 49.99,
-    ),
-  ];
+class _TyreScreenState extends State<TyreScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final prdProvider = Provider.of<ProductProvider>(context, listen: false);
+    prdProvider.fetchProductList(widget.category ?? '');
+  }
 
   @override
   Widget build(BuildContext context) {
+    final prdProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 30),
+          Padding(
+            padding: const EdgeInsets.only(left: 30, top: 20),
             child: Text(
-              'Tyre',
+              widget.category ?? 'All Categories',
               style: TextStyle(fontSize: 25),
             ),
           ),
@@ -73,35 +49,53 @@ class _CategoryPageState extends State<TyreScreen> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(8.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 2 / 3,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TireDetailPage(),
-                      ),
-                    );
-                  },
-                  child: ProductCard(
-                    product: products[index],
-                    onFavoriteToggle: () {
-                      setState(() {
-                        products[index].isFavorite =
-                            !products[index].isFavorite;
-                      });
+            child: Consumer<ProductProvider>(
+              builder: (context, prdProvider, child) {
+                if (prdProvider.productList.isEmpty) {
+                  return Center(
+                    child: Text('No Data'),
+                  );
+                } else {
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 2 / 3,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                    ),
+                    itemCount: prdProvider.productList.length,
+                    itemBuilder: (context, index) {
+                      ProductModel product = prdProvider.productList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TireDetailPage(
+                                product: product,
+                              ),
+                            ),
+                          );
+                        },
+                        child: GridTile(
+                          child: Image.network(
+                            product.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                          footer: GridTileBar(
+                            backgroundColor: Colors.black54,
+                            title: Text(
+                              product.name,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      );
                     },
-                  ),
-                );
+                  );
+                }
               },
             ),
           ),

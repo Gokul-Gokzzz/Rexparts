@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/view/category/category.dart';
 import 'package:rexparts/view/favourit/favourit.dart';
 import 'package:rexparts/view/tyre_details/tyre_details.dart';
@@ -133,7 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     return productContainer(
                       context: context,
-                      page: const TireDetailPage(),
+                      // page: const TireDetailPage(
+                      //   product:ProductModel(category: , id: , name: '', description: '', price: null, imageUrl: '') ,
+                      // ),
                       size: size,
                       image: products[index]['image']!,
                       name: products[index]['name']!,

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rexparts/view/Admin/admin_login.dart';
 import 'package:rexparts/view/login/login_form.dart';
 import 'package:rexparts/view/login/reg_form.dart';
 
@@ -12,6 +13,21 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdminLoginPage(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.admin_panel_settings))
+        ],
+      ),
       body: Column(
         children: [
           const Padding(

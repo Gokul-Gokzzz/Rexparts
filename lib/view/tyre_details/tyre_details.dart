@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/widget/details.dart';
 
 class TireDetailPage extends StatelessWidget {
-  const TireDetailPage({super.key});
+  final ProductModel product;
+  const TireDetailPage({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
