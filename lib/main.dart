@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
 import 'package:rexparts/controller/bottom_provider.dart';
 import 'package:rexparts/controller/carsoul_provider.dart';
+import 'package:rexparts/controller/cart_provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
+import 'package:rexparts/controller/product_details_provider.dart';
 import 'package:rexparts/controller/reg_provider.dart';
 // import 'package:rexparts/controller/user_controller.dart';
 import 'package:rexparts/firebase_options.dart';
@@ -39,6 +41,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => RegProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductDetailsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
         ),
       ],
       child: const MaterialApp(

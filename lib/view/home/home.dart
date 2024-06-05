@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: size,
                       image: products[index]['image']!,
                       name: products[index]['name']!,
-                      discountPercentage: products[index]['discount']!,
+                      // discountPercentage: products[index]['discount']!,
                     );
                   },
                 ),

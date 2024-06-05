@@ -4,7 +4,7 @@ productContainer({
   required Size size,
   required String image,
   required String name,
-  required String discountPercentage,
+  // required String discountPercentage,
   required context,
   page,
 }) {
@@ -59,11 +59,12 @@ productContainer({
                   color: const Color.fromARGB(255, 156, 212, 238),
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: Text(
-                  discountPercentage,
-                  style: const TextStyle(
-                      color: Color.fromARGB(255, 4, 83, 148), fontSize: 10),
-                ),
+                // child:
+                //  const Text(
+                //   // discountPercentage,
+                //   // style: const TextStyle(
+                //   //     color: Color.fromARGB(255, 4, 83, 148), fontSize: 10),
+                // ),
               ),
             ),
             Positioned(

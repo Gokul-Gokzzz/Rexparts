@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
@@ -7,7 +6,7 @@ import 'package:rexparts/view/tyre_details/tyre_details.dart';
 
 class TyreScreen extends StatefulWidget {
   final String? category;
-  const TyreScreen({Key? key, this.category}) : super(key: key);
+  const TyreScreen({super.key, this.category});
 
   @override
   _TyreScreenState createState() => _TyreScreenState();
@@ -23,7 +22,7 @@ class _TyreScreenState extends State<TyreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final prdProvider = Provider.of<ProductProvider>(context);
+    // final prdProvider = Provider.of<ProductProvider>(context);
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -33,7 +32,7 @@ class _TyreScreenState extends State<TyreScreen> {
             padding: const EdgeInsets.only(left: 30, top: 20),
             child: Text(
               widget.category ?? 'All Categories',
-              style: TextStyle(fontSize: 25),
+              style: const TextStyle(fontSize: 25),
             ),
           ),
           Padding(
@@ -52,7 +51,7 @@ class _TyreScreenState extends State<TyreScreen> {
             child: Consumer<ProductProvider>(
               builder: (context, prdProvider, child) {
                 if (prdProvider.productList.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text('No Data'),
                   );
                 } else {
@@ -69,30 +68,47 @@ class _TyreScreenState extends State<TyreScreen> {
                     itemBuilder: (context, index) {
                       ProductModel product = prdProvider.productList[index];
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TireDetailPage(
-                                product: product,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TireDetailPage(
+                                  product: product,
+                                ),
+                              ),
+                            );
+                          },
+                          child: GridTile(
+                            footer: GridTileBar(
+                              backgroundColor: Colors.black54,
+                              title: Text(
+                                product.name,
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                          );
-                        },
-                        child: GridTile(
-                          child: Image.network(
-                            product.imageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                          footer: GridTileBar(
-                            backgroundColor: Colors.black54,
-                            title: Text(
-                              product.name,
-                              textAlign: TextAlign.center,
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  height: 205,
+                                  width: 300,
+                                  child: Image.network(
+                                    product.imageUrl,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      );
+                          ));
                     },
                   );
                 }

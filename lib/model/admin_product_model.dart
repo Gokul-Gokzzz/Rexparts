@@ -5,6 +5,8 @@ class ProductModel {
   final String description;
   final double price;
   final String imageUrl;
+  final int? quantity;
+  bool favorite;
 
   ProductModel({
     required this.id,
@@ -13,6 +15,8 @@ class ProductModel {
     required this.description,
     required this.price,
     required this.imageUrl,
+    this.quantity,
+    this.favorite = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -23,6 +27,7 @@ class ProductModel {
       'description': description,
       'price': price,
       'imageUrl': imageUrl,
+      'quantity': quantity,
     };
   }
 
@@ -34,6 +39,7 @@ class ProductModel {
       description: data['description'],
       price: data['price'],
       imageUrl: data['imageUrl'],
+      quantity: data['quantity'],
     );
   }
 }
