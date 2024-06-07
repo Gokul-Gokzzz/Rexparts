@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,13 +33,9 @@ class AuthService {
 
   Future<void> addUser(UserModel data) async {
     try {
-      if (firebaseAuth.currentUser != null) {
-        await user.doc(firebaseAuth.currentUser!.uid).set(data);
-      } else {
-        throw Exception('No current user found');
-      }
+      await user.doc(firebaseAuth.currentUser!.uid).set(data);
     } catch (e) {
-      log('Error adding post :$e');
+      log('Error adding user: $e');
     }
   }
 
@@ -199,6 +193,18 @@ class AuthService {
           ),
         ),
       );
+    }
+  }
+
+  Future<void> updateUser(UserModel data) async {
+    try {
+      if (firebaseAuth.currentUser != null) {
+        await user.doc(firebaseAuth.currentUser!.uid).update(data.toJson());
+      } else {
+        throw Exception('No current user found');
+      }
+    } catch (e) {
+      log('Error updating user: $e');
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
 import 'package:rexparts/controller/reg_provider.dart';
+import 'package:rexparts/controller/user_controller.dart';
 import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
 import 'package:rexparts/widget/popup_widget.dart';
 // import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
@@ -14,6 +15,7 @@ class RegisterForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final regProvider = Provider.of<LoginProvider>(context, listen: false);
+    final pro = Provider.of<UserProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -47,6 +49,7 @@ class RegisterForm extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: TextFormField(
+                          keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Enter Email';
@@ -143,15 +146,12 @@ class RegisterForm extends StatelessWidget {
                             ),
                           ),
                           onPressed: () async {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => BottomNavBar()));
                             if (formKey.currentState!.validate()) {
                               try {
                                 regProvider.signUpWithEmail(
                                     regProvider.emailController.text,
                                     regProvider.passwordController.text);
+                                pro.addUser();
                                 Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                     builder: (context) => BottomNavBar(),

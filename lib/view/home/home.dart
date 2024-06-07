@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rexparts/model/admin_product_model.dart';
+import 'package:provider/provider.dart';
+import 'package:rexparts/controller/admin_controller.dart';
 import 'package:rexparts/view/category/category.dart';
 import 'package:rexparts/view/favourit/favourit.dart';
 import 'package:rexparts/view/tyre_details/tyre_details.dart';
@@ -18,18 +21,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    Provider.of<ProductProvider>(context, listen: false).getProduct();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final List products = [
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '10%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '20%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '15%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '25%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '15%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '25%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '15%'},
-      {'image': 'assets/slide2.png', 'name': 'Engine', 'discount': '25%'},
-    ];
 
     return Scaffold(
       body: SafeArea(
@@ -45,9 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       "Rexparts",
                       style: GoogleFonts.dmSerifText(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                 ],
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           color: Colors.blue,
                         ),
-                      )
+                      ),
                     ],
                   ),
                   Column(
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FavouritesPage(),
+                              builder: (context) => Favourites(),
                             ),
                           );
                         },
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           color: Colors.blue,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -119,32 +119,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 0.75,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    return productContainer(
-                      context: context,
-                      // page: const TireDetailPage(
-                      //   product:ProductModel(category: , id: , name: '', description: '', price: null, imageUrl: '') ,
-                      // ),
-                      size: size,
-                      image: products[index]['image']!,
-                      name: products[index]['name']!,
-                      // discountPercentage: products[index]['discount']!,
-                    );
-                  },
-                ),
-              ),
+              Consumer<ProductProvider>(builder: (context, value, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: value.allproducts.isNotEmpty
+                      ? GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 0.75,
+                          ),
+                          itemCount: value.allproducts.length,
+                          itemBuilder: (context, index) {
+                            final product = value.allproducts[index];
+                            log(product.category);
+                            return productContainer(
+                              context: context,
+                              page: TireDetailPage(product: product),
+                              size: size,
+                              image: product.imageUrl,
+                              name: product.name,
+                            );
+                          },
+                        )
+                      : const Center(child: CircularProgressIndicator()),
+                );
+              }),
             ],
           ),
         ),

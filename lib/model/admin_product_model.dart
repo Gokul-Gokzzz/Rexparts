@@ -1,22 +1,22 @@
 class ProductModel {
-  final String id;
+  final String? id;
   final String name;
   final String category;
   final String description;
   final double price;
   final String imageUrl;
   final int? quantity;
-  bool favorite;
+  List? favorite = [];
 
   ProductModel({
-    required this.id,
+    this.id,
     required this.name,
     required this.category,
     required this.description,
     required this.price,
     required this.imageUrl,
     this.quantity,
-    this.favorite = false,
+    this.favorite,
   });
 
   Map<String, dynamic> toJson() {
@@ -28,10 +28,11 @@ class ProductModel {
       'price': price,
       'imageUrl': imageUrl,
       'quantity': quantity,
+      'favorite': favorite,
     };
   }
 
-  factory ProductModel.fromJson(Map<String, dynamic> data) {
+  factory ProductModel.fromJson(data) {
     return ProductModel(
       id: data['id'],
       name: data['name'],
@@ -40,6 +41,7 @@ class ProductModel {
       price: data['price'],
       imageUrl: data['imageUrl'],
       quantity: data['quantity'],
+      favorite: List<String>.from(data['favorite']),
     );
   }
 }

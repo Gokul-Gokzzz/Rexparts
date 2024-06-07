@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:rexparts/controller/cart_provider.dart';
 import 'package:rexparts/controller/product_details_provider.dart';
 import 'package:rexparts/model/admin_product_model.dart';
-import 'package:rexparts/widget/cart_items.dart';
+import 'package:rexparts/model/cart_model.dart';
 
 class TireDetailPage extends StatelessWidget {
   final ProductModel product;
@@ -17,7 +17,7 @@ class TireDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pirelli Cinturato P7'),
+        title: const Text('Tire Details'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -36,12 +36,12 @@ class TireDetailPage extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               product.name,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             Text(
-              'Rs : ${product.price.toString()}',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              'Rs: ${product.price.toString()}',
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
             Text(product.description),
@@ -57,7 +57,7 @@ class TireDetailPage extends StatelessWidget {
                   ),
                   Text(
                     value.i.toString(),
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
@@ -69,24 +69,33 @@ class TireDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                addToCart(
-                  context,
-                  product,
-                );
-                // await scafoldMessage(context);
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(300, 50),
-                backgroundColor: const Color.fromARGB(255, 91, 47, 168),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-              child: const Text(
-                'Add to Cart',
-                style: TextStyle(color: Colors.white),
+            Consumer<CartProvider>(
+              builder: (context, cartProvider, child) => ElevatedButton(
+                onPressed: () async {
+                  final quantity = Provider.of<ProductDetailsProvider>(context,
+                          listen: false)
+                      .i;
+                  final cartItem = CartModel(
+                    id: product.id!,
+                    name: product.name,
+                    price: product.price,
+                    imageUrl: product.imageUrl,
+                    quantity: quantity,
+                  );
+                  await cartProvider.addCart(cartItem);
+                  scafoldMessage(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(300, 50),
+                  backgroundColor: const Color.fromARGB(255, 91, 47, 168),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
+                child: const Text(
+                  'Add to Cart',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -95,29 +104,14 @@ class TireDetailPage extends StatelessWidget {
     );
   }
 
-  void addToCart(
-    BuildContext context,
-    ProductModel product,
-  ) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    final pro = Provider.of<ProductDetailsProvider>(context, listen: false);
-    cartProvider.addToCart(
-      CartItem(
-        name: product.name,
-        price: product.price,
-        image: product.imageUrl,
-        quantity: pro.i,
-      ),
-    );
-    // scafoldMessage(context);
-  }
-
   void scafoldMessage(BuildContext context) {
     final snackBar = SnackBar(
       content: const Text('Item added to cart'),
       action: SnackBarAction(
         label: "Back",
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

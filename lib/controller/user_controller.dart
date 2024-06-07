@@ -1,21 +1,41 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:rexparts/model/user_model.dart';
-// import 'package:rexparts/service/firestore_service.dart';
+import 'package:flutter/material.dart';
+import 'package:rexparts/model/user_model.dart';
+import 'package:rexparts/service/auth_service.dart';
 
-// class UserProvider extends ChangeNotifier {
-//   final FirebaseAuth auth = FirebaseAuth.instance;
-//   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-//   FirestoreService firestoreService = FirestoreService();
-//   UserModel? userModel;
-//   getCurrentUser() async {
-//     userModel = await firestoreService.fetchUserData();
-//     notifyListeners();
-//   }
+class UserProvider extends ChangeNotifier {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  UserModel? currentUser;
+  final AuthService authService = AuthService();
 
-//   addUser(UserModel user) async {
-//     await firestoreService.storeUserData(user);
-//     notifyListeners();
-//   }
-// }
+  getUser() async {
+    currentUser = await authService.getCurrentUser();
+    if (currentUser != null) {
+      nameController.text = currentUser!.name ?? '';
+      emailController.text = currentUser!.email ?? '';
+      phoneController.text = currentUser!.phoneNumber ?? '';
+    }
+    notifyListeners();
+  }
+
+  addUser() async {
+    final user = UserModel(
+      email: emailController.text,
+      phoneNumber: phoneController.text,
+      name: nameController.text,
+    );
+    await authService.addUser(user);
+    getUser();
+  }
+
+  updateUser() async {
+    final user = UserModel(
+      email: emailController.text,
+      phoneNumber: phoneController.text,
+      name: nameController.text,
+    );
+    await authService.updateUser(user);
+    getUser();
+  }
+}
