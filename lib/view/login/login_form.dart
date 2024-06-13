@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_unnecessary_containers, use_build_context_synchronously
-
 import 'package:email_validator/email_validator.dart';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +14,9 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
-
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -32,59 +30,58 @@ class LoginForm extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: loginProvider.emailController,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return " Please Enter  Email";
+                          return "Please Enter Email";
                         } else if (!EmailValidator.validate(value)) {
-                          return "Please Enter a valid  Email Address ";
+                          return "Please Enter a valid Email Address";
                         }
                         return null;
                       },
                       decoration: const InputDecoration(
                         label: Text('Email Address'),
                         prefixIcon: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Icon(Icons.email)),
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(Icons.email),
+                        ),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Column(children: [
-                      Consumer<LoginProvider>(
-                        builder: (context, value, child) => TextFormField(
-                          controller: loginProvider.passwordController,
-                          obscureText: value.signInObscureText,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Enter Password ";
-                            } else if (value.length <= 6) {
-                              return "Enter Password Atleast 6 ";
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            label: const Text('Password'),
-                            prefixIcon: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Icon(Icons.password)),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                value.signInObscureChange();
-                              },
-                              icon: Icon(value.signInObscureText
+                    child: Consumer<LoginProvider>(
+                      builder: (context, value, child) => TextFormField(
+                        controller: loginProvider.passwordController,
+                        obscureText: value.signInObscureText,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Enter Password";
+                          } else if (value.length < 6) {
+                            return "Enter Password At Least 6 Characters";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          label: const Text('Password'),
+                          prefixIcon: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Icon(Icons.password),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              value.signInObscureChange();
+                            },
+                            icon: Icon(
+                              value.signInObscureText
                                   ? EneftyIcons.eye_slash_outline
-                                  : EneftyIcons.eye_outline),
+                                  : EneftyIcons.eye_outline,
                             ),
                           ),
                         ),
                       ),
-                    ]),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -101,36 +98,32 @@ class LoginForm extends StatelessWidget {
                         },
                         child: const Text(
                           'Forgot password?',
-                          style: TextStyle(
-                            color: Colors.blue,
-                          ),
+                          style: TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      minimumSize: const Size(
-                        300,
-                        50,
-                      ),
+                      minimumSize: const Size(300, 50),
                     ),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         try {
                           await loginProvider.signInWithEmail(
-                              loginProvider.emailController.text,
-                              loginProvider.passwordController.text);
+                            loginProvider.emailController.text,
+                            loginProvider.passwordController.text,
+                          );
                           PopupWidgets()
                               .showSuccessSnackbar(context, 'User logged in');
                           Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BottomNavBar()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BottomNavBar(),
+                            ),
+                          );
                           loginProvider.clearControllers();
                         } catch (e) {
                           loginProvider.clearControllers();
@@ -144,9 +137,7 @@ class LoginForm extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -166,9 +157,7 @@ class LoginForm extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Consumer<LoginProvider>(
                     builder: (context, value, child) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -37,9 +38,9 @@ class CartService {
     }
   }
 
-  Future<void> addProduct(CartModel cart) async {
+  Future<void> addProduct(CartModel cart, String id) async {
     try {
-      await cartProduct.add(cart);
+      await cartProduct.doc(id).set(cart);
     } catch (e) {
       throw Exception("Error adding product: $e");
     }

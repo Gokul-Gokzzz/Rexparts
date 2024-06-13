@@ -11,61 +11,39 @@ import 'package:rexparts/widget/popup_widget.dart';
 class AuthService {
   String? verificationid;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  String collection = 'User';
+  String collection = 'user';
   Reference storage = FirebaseStorage.instance.ref();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late CollectionReference<UserModel> user;
-
-  AuthService() {
-    user = FirebaseFirestore.instance
-        .collection(collection)
-        .withConverter<UserModel>(
-      fromFirestore: (snapshot, options) {
-        return UserModel.fromJson(
-          snapshot.data()!,
-        );
-      },
-      toFirestore: (value, options) {
-        return value.toJson();
-      },
-    );
-  }
 
   Future<void> addUser(UserModel data) async {
     try {
-      await user.doc(firebaseAuth.currentUser!.uid).set(data);
-    } catch (e) {
-      log('Error adding user: $e');
-    }
-  }
-
-  Future<UserModel?> getCurrentUser() async {
-    try {
-      if (firebaseAuth.currentUser == null) {
-        throw Exception('No current user found');
-      }
-      final snapshot = await firestore
+      await firestore
           .collection(collection)
           .doc(firebaseAuth.currentUser!.uid)
-          .get();
-      if (snapshot.exists && snapshot.data() != null) {
-        return UserModel.fromJson(snapshot.data()!);
-      } else {
-        return null;
-      }
+          .set(data.toJson());
     } catch (e) {
-      log('Error getting current user: $e');
-      rethrow;
+      ScaffoldMessenger(
+        child: Text('User not Added'),
+      );
     }
   }
 
-  Future<UserCredential> signUpWithEmail(String email, String password) async {
+  Future<UserCredential> signUpWithEmail(
+      {required String email,
+      required String password,
+      required String userName}) async {
     try {
       UserCredential userCredential =
           await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      UserModel userData = UserModel(
+          email: email, name: userName, userId: userCredential.user?.uid);
+      await firestore
+          .collection(collection)
+          .doc(userCredential.user?.uid)
+          .set(userData.toJson());
       log('Account created');
       return userCredential;
     } catch (e) {
@@ -199,7 +177,10 @@ class AuthService {
   Future<void> updateUser(UserModel data) async {
     try {
       if (firebaseAuth.currentUser != null) {
-        await user.doc(firebaseAuth.currentUser!.uid).update(data.toJson());
+        await firestore
+            .collection(collection) // Using 'user'
+            .doc(firebaseAuth.currentUser!.uid)
+            .update(data.toJson());
       } else {
         throw Exception('No current user found');
       }

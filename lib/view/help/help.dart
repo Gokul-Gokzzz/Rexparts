@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:rexparts/view/chat/chat_screen.dart';
 
 class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});
@@ -12,7 +14,7 @@ class HelpScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
-          children: const <Widget>[
+          children: [
             ListTile(
               title: Text(
                 'How to Order Spare Parts?',
@@ -36,6 +38,35 @@ class HelpScreen extends StatelessWidget {
                 'If you have any further questions or need assistance, feel free to contact our support team at support@example.com.',
               ),
             ),
+            SizedBox(
+              height: 300,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'For Know About Us Come Here',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 20,
+                    child: LottieBuilder.asset('assets/chat.json'),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),

@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const OrderScreen(),
+                    builder: (context) => OrderScreen(),
                   ),
                 );
               }),

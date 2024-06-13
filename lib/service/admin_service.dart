@@ -20,11 +20,9 @@ class FirebaseService {
             (e) => ProductModel.fromJson(e),
           )
           .toList();
-      log("jasdaks${data.length.toString()}");
+
       return data;
     } catch (e) {
-      log(e.toString());
-      log('for--m service');
       throw e;
     }
   }
@@ -57,7 +55,6 @@ class FirebaseService {
   Future<void> favListClicked(String id, bool status) async {
     try {
       if (status == true) {
-        log('add to fav');
         await firestore.collection('product').doc(id).update(
           {
             'favorite': FieldValue.arrayUnion(
@@ -66,7 +63,6 @@ class FirebaseService {
           },
         );
       } else {
-        log('add to faasdkf;askljkajv');
         await firestore.collection('product').doc(id).update(
           {
             'favorite': FieldValue.arrayRemove(

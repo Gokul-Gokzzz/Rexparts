@@ -39,24 +39,24 @@ productContainer({
                 fit: BoxFit.cover,
               ),
             ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.favorite_border,
-                  color: Color.fromARGB(255, 223, 117, 110),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: 10,
+            //   right: 10,
+            //   // child: IconButton(
+            //   //   onPressed: () {},
+            //   //   // icon: const Icon(
+            //   //   //   Icons.favorite_border,
+            //   //   //   color: Color.fromARGB(255, 223, 117, 110),
+            //   //   // ),
+            //   // ),
+            // ),
             Positioned(
               top: 10,
               left: 10,
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 156, 212, 238),
+                  // color: const Color.fromARGB(255, 156, 212, 238),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 // child:

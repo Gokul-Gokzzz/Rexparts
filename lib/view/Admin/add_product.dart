@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
+import 'package:rexparts/view/Admin/receiver_chat.dart';
 
 class AddProductPage extends StatefulWidget {
   @override
@@ -128,6 +130,36 @@ class _AddProductPageState extends State<AddProductPage> {
                   },
                   child: Text('Submit'),
                 ),
+                SizedBox(
+                  height: 150,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'You Have a Message',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReceiverChat(),
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 20,
+                        child: Lottie.asset('assets/chat.json'),
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),

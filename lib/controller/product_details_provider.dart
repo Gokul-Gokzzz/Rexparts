@@ -13,4 +13,9 @@ class ProductDetailsProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  clear() {
+    i = 0;
+    notifyListeners();
+  }
 }

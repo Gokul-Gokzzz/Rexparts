@@ -2,7 +2,7 @@ import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
-import 'package:rexparts/controller/reg_provider.dart';
+
 import 'package:rexparts/controller/user_controller.dart';
 import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
 import 'package:rexparts/widget/popup_widget.dart';
@@ -66,7 +66,7 @@ class RegisterForm extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Consumer<RegProvider>(
+                      Consumer<LoginProvider>(
                         builder: (context, value, child) => Column(
                           children: [
                             Padding(
@@ -148,10 +148,13 @@ class RegisterForm extends StatelessWidget {
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               try {
-                                regProvider.signUpWithEmail(
+                                await regProvider.signUpWithEmail(
                                     regProvider.emailController.text,
-                                    regProvider.passwordController.text);
-                                pro.addUser();
+                                    regProvider.passwordController.text,
+                                    regProvider.userNameController.text);
+                                await pro.addUser(
+                                    regProvider.emailController.text,
+                                    regProvider.userNameController.text);
                                 Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                     builder: (context) => BottomNavBar(),

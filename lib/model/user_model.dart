@@ -1,20 +1,19 @@
 class UserModel {
   String? name;
-
+  String? userId;
   String? email;
-  String? phoneNumber;
 
   UserModel({
     this.email,
     this.name,
-    this.phoneNumber,
+    this.userId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       email: json['email'],
       name: json['name'],
-      phoneNumber: json['phoneNumber'],
+      userId: json['userid'],
     );
   }
 
@@ -22,7 +21,7 @@ class UserModel {
     return {
       'name': name,
       'email': email,
-      'phoneNumber': phoneNumber,
+      'userid': userId,
     };
   }
 }

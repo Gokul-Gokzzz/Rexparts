@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: value.allproducts.length,
                           itemBuilder: (context, index) {
                             final product = value.allproducts[index];
-                            log(product.category);
+
                             return productContainer(
                               context: context,
                               page: TireDetailPage(product: product),

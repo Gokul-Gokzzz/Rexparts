@@ -20,7 +20,7 @@ class _FavouritesState extends State<Favourites> {
         title: const Text("Favourites", style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
-      body: favWidget().buildFavouriteItem(context),
+      body: Fav(),
     );
   }
 }

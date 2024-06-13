@@ -4,6 +4,7 @@ import 'package:rexparts/controller/cart_provider.dart';
 import 'package:rexparts/controller/product_details_provider.dart';
 import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/model/cart_model.dart';
+import 'package:rexparts/view/cart/cart.dart';
 
 class TireDetailPage extends StatelessWidget {
   final ProductModel product;
@@ -69,8 +70,9 @@ class TireDetailPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Consumer<CartProvider>(
-              builder: (context, cartProvider, child) => ElevatedButton(
+            Consumer2<CartProvider, ProductDetailsProvider>(
+              builder: (context, cartProvider, detailProvider, child) =>
+                  ElevatedButton(
                 onPressed: () async {
                   final quantity = Provider.of<ProductDetailsProvider>(context,
                           listen: false)
@@ -82,8 +84,9 @@ class TireDetailPage extends StatelessWidget {
                     imageUrl: product.imageUrl,
                     quantity: quantity,
                   );
-                  await cartProvider.addCart(cartItem);
+                  await cartProvider.addCart(cartItem, product.id.toString());
                   scafoldMessage(context);
+                  detailProvider.clear();
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(300, 50),
@@ -108,9 +111,14 @@ class TireDetailPage extends StatelessWidget {
     final snackBar = SnackBar(
       content: const Text('Item added to cart'),
       action: SnackBarAction(
-        label: "Back",
+        label: "Back To Cart",
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CartPage(),
+            ),
+          );
         },
       ),
     );

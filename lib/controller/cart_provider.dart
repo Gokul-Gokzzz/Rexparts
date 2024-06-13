@@ -8,9 +8,9 @@ class CartProvider extends ChangeNotifier {
 
   List<CartModel> cartItems = [];
 
-  Future<void> addCart(CartModel cart) async {
+  Future<void> addCart(CartModel cart, String id) async {
     try {
-      await cartService.addProduct(cart);
+      await cartService.addProduct(cart, id);
       await fetchCart();
     } catch (error) {
       log("Error adding to cart: $error");
@@ -19,10 +19,9 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> removeFromCart(String id) async {
     try {
-      await cartService.deleteProduct(id);
-      cartItems.removeWhere((item) => item.id == id);
-      log("Removed item with id: $id from cart");
-      await fetchCart(); // Ensure the cart is fetched again to update the UI correctly
+      await CartService().deleteProduct(id);
+      notifyListeners();
+      await fetchCart();
     } catch (e) {
       log("Error removing from cart: $e");
     }

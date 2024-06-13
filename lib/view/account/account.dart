@@ -14,7 +14,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<UserProvider>(context, listen: false).getUser();
+    // Provider.of<UserProvider>(context, listen: false).getUser();
   }
 
   @override
@@ -59,9 +59,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      value.nameController.text.isEmpty
+                      value.UsernameController.text.isEmpty
                           ? 'N/A'
-                          : value.nameController.text,
+                          : value.UsernameController.text,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25),
                     ),

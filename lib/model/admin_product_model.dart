@@ -1,7 +1,7 @@
 class ProductModel {
   final String? id;
   final String name;
-  final String category;
+  final String? category;
   final String description;
   final double price;
   final String imageUrl;
@@ -11,7 +11,7 @@ class ProductModel {
   ProductModel({
     this.id,
     required this.name,
-    required this.category,
+    this.category,
     required this.description,
     required this.price,
     required this.imageUrl,

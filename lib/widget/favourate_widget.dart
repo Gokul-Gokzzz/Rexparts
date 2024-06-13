@@ -10,8 +10,11 @@ import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/view/tyre_details/tyre_details.dart';
 import 'package:rexparts/widget/text_widget.dart';
 
-class favWidget {
-  Widget buildFavouriteItem(context) {
+class Fav extends StatelessWidget {
+  const Fav({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     bool? thisuser;
     return Consumer2<FavoutareProvider, ProductProvider>(
         builder: (context, favvalue, addvalue, child) {
@@ -54,9 +57,9 @@ class favWidget {
                           borderRadius: BorderRadius.circular(8),
                           image: DecorationImage(
                             image: item.imageUrl != null
-                                ? NetworkImage(item.imageUrl[0])
-                                    as ImageProvider
-                                : const AssetImage('assets/images/dummy image.jpg'),
+                                ? NetworkImage(item.imageUrl) as ImageProvider
+                                : const AssetImage(
+                                    'assets/images/dummy image.jpg'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -70,7 +73,7 @@ class favWidget {
                           weight: FontWeight.bold),
                       trailing: IconButton(
                         icon: const Icon(
-                          EneftyIcons.heart_bold,
+                          Icons.delete_outline_rounded,
                           color: Colors.red,
                         ),
                         onPressed: () async {

@@ -9,14 +9,15 @@ class FavoutareProvider extends ChangeNotifier {
   FirebaseService productService = FirebaseService();
 
   Future<void> favouritesCliscked(String id, bool status) async {
-    log('fvt controler');
     await productService.favListClicked(id, status);
+    log('fvt controler');
     notifyListeners();
   }
 
   bool favouritesCheck(ProductModel product) {
     final currentuser = FirebaseAuth.instance.currentUser;
     final user = currentuser!.email ?? currentuser.phoneNumber;
+    log('Fav added');
     return !product.favorite!.contains(user);
   }
 }

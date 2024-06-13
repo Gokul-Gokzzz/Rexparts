@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/cart_provider.dart';
+import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/model/cart_model.dart';
+import 'package:rexparts/view/payment_Screen/razorpay.dart';
+import 'package:rexparts/view/tyre_details/tyre_details.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -13,8 +16,10 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   void initState() {
-    Provider.of<CartProvider>(context, listen: false).fetchCart();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<CartProvider>(context, listen: false).fetchCart();
+    });
   }
 
   @override
@@ -30,41 +35,67 @@ class _CartPageState extends State<CartPage> {
                   itemCount: cartProvider.cartItems.length,
                   itemBuilder: (context, index) {
                     final item = cartProvider.cartItems[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(item.name),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Rs:${item.totalPrice.toString()}'),
-                                Text('Qty:${item.quantity.toString()}'),
-                              ],
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TireDetailPage(
+                              product: item.toProductModel(),
                             ),
-                            Container(
-                              height: 40,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color.fromARGB(255, 255, 255, 255),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: ListTile(
+                          title: Text(item.name),
+                          subtitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Rs:${item.totalPrice.toString()}'),
+                                  Text('Qty:${item.quantity.toString()}'),
+                                ],
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'Buy',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PaymentScreen(
+                                        productAmount: item.totalPrice,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: const Color.fromARGB(
+                                        255, 255, 255, 255),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'Buy',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        leading: Image.network(item.imageUrl),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            _showDeleteDialog(context, cartProvider, item);
-                          },
+                            ],
+                          ),
+                          leading: Image.network(item.imageUrl),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              _showDeleteDialog(context, cartProvider, item);
+                            },
+                          ),
                         ),
                       ),
                     );
@@ -83,7 +114,14 @@ class _CartPageState extends State<CartPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // place order
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentScreen(
+                              productAmount: cartProvider.subtotal,
+                            ),
+                          ),
+                        );
                       },
                       child: Text('Place Order'),
                     ),
@@ -112,8 +150,8 @@ class _CartPageState extends State<CartPage> {
               child: Text('No'),
             ),
             TextButton(
-              onPressed: () {
-                cartProvider.removeFromCart(item.id);
+              onPressed: () async {
+                await cartProvider.removeFromCart(item.id);
                 Navigator.pop(context);
               },
               child: Text('Yes'),
@@ -121,6 +159,18 @@ class _CartPageState extends State<CartPage> {
           ],
         );
       },
+    );
+  }
+}
+
+extension on CartModel {
+  ProductModel toProductModel() {
+    return ProductModel(
+      id: id,
+      name: name,
+      description: 'Description of $name', // Add appropriate description
+      imageUrl: imageUrl,
+      price: price,
     );
   }
 }
