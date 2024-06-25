@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,11 +6,11 @@ import 'package:rexparts/model/cart_model.dart';
 class CartService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
-
+  String collection = 'cart';
   late CollectionReference<CartModel> cartProduct;
 
   CartService() {
-    cartProduct = firestore.collection('cart').withConverter<CartModel>(
+    cartProduct = firestore.collection(collection).withConverter<CartModel>(
           fromFirestore: (snapshots, _) =>
               CartModel.fromJson(snapshots.data()!),
           toFirestore: (product, _) => product.toJson(),
@@ -52,6 +51,14 @@ class CartService {
       return snapshot.docs.map((doc) => doc.data()).toList();
     } catch (e) {
       throw Exception("Error fetching cart: $e");
+    }
+  }
+
+  Future<void> updateIsOrder(String id, bool isOrder) async {
+    try {
+      await cartProduct.doc(id).update({'isOrder': isOrder});
+    } catch (e) {
+      throw Exception("Error updating isOrder: $e");
     }
   }
 }

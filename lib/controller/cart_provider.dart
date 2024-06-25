@@ -7,7 +7,7 @@ class CartProvider extends ChangeNotifier {
   final CartService cartService = CartService();
 
   List<CartModel> cartItems = [];
-
+  List<CartModel> orders = [];
   Future<void> addCart(CartModel cart, String id) async {
     try {
       await cartService.addProduct(cart, id);
@@ -38,5 +38,18 @@ class CartProvider extends ChangeNotifier {
 
   double get subtotal {
     return cartItems.fold(0, (total, current) => total + current.totalPrice);
+  }
+
+  void addOrder(CartModel order) {
+    orders.add(order);
+    notifyListeners();
+  }
+
+  List<CartModel> getOrders() {
+    return orders;
+  }
+
+  Future<void> updateCart({id, isOrder}) async {
+    await cartService.updateIsOrder(id, isOrder);
   }
 }

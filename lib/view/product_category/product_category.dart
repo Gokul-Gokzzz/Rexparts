@@ -1,21 +1,21 @@
-import 'dart:developer';
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
 import 'package:rexparts/controller/favoutare_provider.dart';
 import 'package:rexparts/model/admin_product_model.dart';
-import 'package:rexparts/view/tyre_details/tyre_details.dart';
+import 'package:rexparts/view/product_details/product_details.dart';
 
-class TyreScreen extends StatefulWidget {
+class ProductCategory extends StatefulWidget {
   final String? category;
-  const TyreScreen({Key? key, this.category}) : super(key: key);
+  const ProductCategory({super.key, this.category});
 
   @override
-  _TyreScreenState createState() => _TyreScreenState();
+  _ProductCategoryState createState() => _ProductCategoryState();
 }
 
-class _TyreScreenState extends State<TyreScreen> {
+class _ProductCategoryState extends State<ProductCategory> {
   @override
   void initState() {
     super.initState();
@@ -83,7 +83,7 @@ class _TyreScreenState extends State<TyreScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TireDetailPage(
+                              builder: (context) => ProductDetailPage(
                                 product: product,
                               ),
                             ),
@@ -123,7 +123,7 @@ class _TyreScreenState extends State<TyreScreen> {
                                             Icons.favorite_border_outlined,
                                             color: Colors.red,
                                           )
-                                        : Icon(
+                                        : const Icon(
                                             Icons.favorite,
                                             color: Colors.red,
                                           ),

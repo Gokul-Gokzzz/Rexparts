@@ -4,23 +4,22 @@ import 'package:rexparts/model/user_model.dart';
 import 'package:rexparts/service/auth_service.dart';
 
 class UserProvider extends ChangeNotifier {
-  TextEditingController UsernameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   UserModel? currentUser;
   final AuthService authService = AuthService();
 
-  // getUser() async {
-  //   currentUser = await authService.getCurrentUser();
-  //   if (currentUser != null) {
-  //     nameController.text = currentUser!.name ?? '';
-  //     emailController.text = currentUser!.email ?? '';
-  //     phoneController.text = currentUser!.phoneNumber ?? '';
-  //   }
-  //   notifyListeners();
-  // }
+  Future<void> getUser() async {
+    currentUser = await authService.getCurrentUser();
+    if (currentUser != null) {
+      usernameController.text = currentUser!.name ?? '';
+      emailController.text = currentUser!.email ?? '';
+    }
+    notifyListeners();
+  }
 
-  addUser(email, name) async {
+  Future<void> addUser(String email, String name) async {
     final user = UserModel(
       email: email,
       name: name,
@@ -30,10 +29,10 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateUser() async {
+  Future<void> updateUser() async {
     final user = UserModel(
       email: emailController.text,
-      name: UsernameController.text,
+      name: usernameController.text,
     );
     await authService.updateUser(user);
   }

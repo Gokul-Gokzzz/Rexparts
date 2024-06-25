@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 );
               },
-              icon: Icon(Icons.admin_panel_settings))
+              icon: const Icon(Icons.admin_panel_settings))
         ],
       ),
       body: Column(

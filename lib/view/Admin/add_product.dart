@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,9 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
-import 'package:rexparts/view/Admin/receiver_chat.dart';
 
 class AddProductPage extends StatefulWidget {
+  const AddProductPage({super.key});
+
   @override
   _AddProductPageState createState() => _AddProductPageState();
 }
@@ -28,7 +31,7 @@ class _AddProductPageState extends State<AddProductPage> {
         Provider.of<ProductProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: const Text('Add Product'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,7 +49,7 @@ class _AddProductPageState extends State<AddProductPage> {
                               height: 100,
                               width: 100,
                               color: Colors.grey[200],
-                              child: Icon(Icons.camera_alt),
+                              child: const Icon(Icons.camera_alt),
                             )
                           : Image.file(productProvider.image!,
                               height: 100, width: 100, fit: BoxFit.cover);
@@ -55,7 +58,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 TextFormField(
                   controller: productProvider.productNameController,
-                  decoration: InputDecoration(labelText: 'Product Name'),
+                  decoration: const InputDecoration(labelText: 'Product Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter product name';
@@ -67,7 +70,7 @@ class _AddProductPageState extends State<AddProductPage> {
                   builder: (context, prd, child) =>
                       DropdownButtonFormField<String>(
                     value: prd.selectedCategory,
-                    decoration: InputDecoration(labelText: 'Category'),
+                    decoration: const InputDecoration(labelText: 'Category'),
                     items: [
                       'Tyre',
                       'Oil and Fluid',
@@ -94,7 +97,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 TextFormField(
                   controller: productProvider.descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: const InputDecoration(labelText: 'Description'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter description';
@@ -104,7 +107,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 TextFormField(
                   controller: productProvider.priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
+                  decoration: const InputDecoration(labelText: 'Price'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -113,7 +116,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (productProvider.formKey.currentState!.validate()) {
@@ -128,30 +131,30 @@ class _AddProductPageState extends State<AddProductPage> {
                       );
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 150,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
+                    const Text(
                       'You Have a Message',
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReceiverChat(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => ReceiverChat(),
+                        //   ),
+                        // );
                       },
                       child: CircleAvatar(
                         radius: 20,

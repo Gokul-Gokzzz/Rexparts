@@ -14,7 +14,7 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<UserProvider>(context, listen: false).getUser();
+    // No need to call getUser() here as it's already called in UserProvider constructor.
   }
 
   @override
@@ -45,8 +45,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: Lottie.asset('assets/profile.json'),
                 ),
                 const SizedBox(height: 50),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Text(
                       'Username',
                       style:
@@ -59,9 +59,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      value.UsernameController.text.isEmpty
+                      value.usernameController.text.isEmpty
                           ? 'N/A'
-                          : value.UsernameController.text,
+                          : value.usernameController.text,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25),
                     ),
@@ -74,8 +74,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Text(
                       'Email',
                       style:
@@ -106,8 +106,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     Text(
                       'Phone Number',
                       style:

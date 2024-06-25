@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:rexparts/view/tyre_category/tyre_category.dart';
+import 'package:rexparts/view/product_category/product_category.dart';
 import 'package:rexparts/widget/category_list.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -40,7 +40,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TyreScreen(
+                          builder: (context) => ProductCategory(
                             category: catgoryNames[index],
                           ),
                         ),

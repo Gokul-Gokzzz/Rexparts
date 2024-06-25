@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rexparts/model/user_model.dart';
+import 'package:rexparts/service/noti_service.dart';
 import 'package:rexparts/view/bottom_bar/bottom_bar.dart';
 import 'package:rexparts/widget/popup_widget.dart';
 
@@ -13,6 +16,7 @@ class AuthService {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   String collection = 'user';
   Reference storage = FirebaseStorage.instance.ref();
+  NotificationService notificationService = NotificationService();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> addUser(UserModel data) async {
@@ -22,10 +26,22 @@ class AuthService {
           .doc(firebaseAuth.currentUser!.uid)
           .set(data.toJson());
     } catch (e) {
-      ScaffoldMessenger(
+      const ScaffoldMessenger(
         child: Text('User not Added'),
       );
     }
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    User? user = firebaseAuth.currentUser;
+    if (user != null) {
+      DocumentSnapshot doc =
+          await firestore.collection(collection).doc(user.uid).get();
+      if (doc.exists) {
+        return UserModel.fromJson(doc.data() as Map<String, dynamic>);
+      }
+    }
+    return null;
   }
 
   Future<UserCredential> signUpWithEmail(
@@ -186,6 +202,42 @@ class AuthService {
       }
     } catch (e) {
       log('Error updating user: $e');
+    }
+  }
+
+  // Future<List<UserModel>> getAllUsers() async {
+  //   try {
+  //     QuerySnapshot querySnapshot =
+  //         await firestore.collection(collection).get();
+  //     List<UserModel> users = querySnapshot.docs.map((doc) {
+  //       return UserModel.fromJson(doc.data() as Map<String, dynamic>);
+  //     }).toList();
+  //     return users;
+  //   } catch (e) {
+  //     log('Error fetching users: $e');
+  //     return [];
+  //   }
+  // }
+
+  Future<List<UserModel>> getAllUsers() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await firestore.collection(collection).get();
+      List<UserModel> users = querySnapshot.docs.map((doc) {
+        return UserModel.fromJson(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      // Send notifications to all users
+      await notificationService.sendNotificationToAllUsers(
+        'New Product Added',
+        'A new product has been added to the catalog!',
+        users,
+      );
+
+      return users;
+    } catch (e) {
+      log('Error fetching users: $e');
+      return [];
     }
   }
 }

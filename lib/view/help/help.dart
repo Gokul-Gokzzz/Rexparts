@@ -1,12 +1,20 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
 import 'package:rexparts/view/chat/chat_screen.dart';
 
 class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+  const HelpScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    UserInfor adminInfo = UserInfor(
+      id: 'adminId',
+      fullName: 'Admin Name',
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Help'),
@@ -15,7 +23,7 @@ class HelpScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            ListTile(
+            const ListTile(
               title: Text(
                 'How to Order Spare Parts?',
                 style: TextStyle(
@@ -26,8 +34,8 @@ class HelpScreen extends StatelessWidget {
                 'To order spare parts, go to the Spare Parts section in the app. Browse through the available parts, select the ones you need, and proceed to checkout to complete your order.',
               ),
             ),
-            Divider(),
-            ListTile(
+            const Divider(),
+            const ListTile(
               title: Text(
                 'Contact Support',
                 style: TextStyle(
@@ -38,17 +46,17 @@ class HelpScreen extends StatelessWidget {
                 'If you have any further questions or need assistance, feel free to contact our support team at support@example.com.',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 300,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
+                const Text(
                   'For Know About Us Come Here',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
@@ -56,7 +64,7 @@ class HelpScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChatScreen(),
+                        builder: (context) => ChatScreen(adminInfo: adminInfo),
                       ),
                     );
                   },

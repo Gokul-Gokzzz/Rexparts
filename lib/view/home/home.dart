@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
 import 'package:rexparts/view/category/category.dart';
 import 'package:rexparts/view/favourit/favourit.dart';
-import 'package:rexparts/view/tyre_details/tyre_details.dart';
+import 'package:rexparts/view/product_details/product_details.dart';
 import 'package:rexparts/widget/home_widget.dart';
 import 'package:rexparts/widget/slider.dart';
 
@@ -91,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Favourites(),
+                              builder: (context) => const Favourites(),
                             ),
                           );
                         },
@@ -139,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             return productContainer(
                               context: context,
-                              page: TireDetailPage(product: product),
+                              page: ProductDetailPage(product: product),
                               size: size,
                               image: product.imageUrl,
                               name: product.name,

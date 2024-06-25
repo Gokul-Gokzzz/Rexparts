@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rexparts/model/admin_product_model.dart';
 import 'package:rexparts/service/admin_service.dart';
+import 'package:rexparts/service/auth_service.dart';
+import 'package:rexparts/service/noti_service.dart';
 
 class ProductProvider with ChangeNotifier {
   final FirebaseService firebaseService = FirebaseService();
@@ -14,14 +16,21 @@ class ProductProvider with ChangeNotifier {
   List<ProductModel> productList = [];
   List<ProductModel> filteredProductList = [];
   List<ProductModel> allproducts = [];
+  AuthService authService = AuthService();
 
   String? selectedCategory;
   File? image;
+  NotificationService notificationService = NotificationService();
 
   final ImagePicker picker = ImagePicker();
 
   void setImage(File pickedImage) {
     image = pickedImage;
+    notifyListeners();
+  }
+
+  void updateProducts(List<ProductModel> products) {
+    allproducts = products;
     notifyListeners();
   }
 
@@ -50,6 +59,12 @@ class ProductProvider with ChangeNotifier {
 
       await firebaseService.addProduct(product);
       notifyListeners();
+      await authService.getAllUsers();
+
+      // await notificationService.showNotification(
+      //   title: 'New Product Added',
+      //   body: '$name is now available in $category category!',
+      // );
     } catch (e) {
       log('Error adding product: $e');
     }

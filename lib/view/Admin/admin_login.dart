@@ -21,13 +21,13 @@ class AdminLoginPage extends StatelessWidget {
           children: [
             TextFormField(
               controller: usernamecontroller,
-              decoration: InputDecoration(labelText: "Username"),
+              decoration: const InputDecoration(labelText: "Username"),
             ),
             const SizedBox(height: 20),
             TextFormField(
               controller: passwordcontroller,
               obscureText: true,
-              decoration: InputDecoration(labelText: "Password"),
+              decoration: const InputDecoration(labelText: "Password"),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -47,7 +47,7 @@ class AdminLoginPage extends StatelessWidget {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AddProductPage(),
+            builder: (context) => const AddProductPage(),
           ));
     }
   }

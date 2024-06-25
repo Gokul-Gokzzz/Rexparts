@@ -1,4 +1,6 @@
-import 'dart:developer';
+// ignore_for_file: use_rethrow_when_possible
+
+// import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -47,7 +49,7 @@ class FirebaseService {
           .get();
       return snapshot.docs.map((doc) => ProductModel.fromJson(doc)).toList();
     } catch (error) {
-      log('Error fetching category: $error');
+      // log('Error fetching category: $error');
       return [];
     }
   }
@@ -72,7 +74,7 @@ class FirebaseService {
         );
       }
     } catch (e) {
-      log("error is $e");
+      // log("error is $e");
     }
   }
 }

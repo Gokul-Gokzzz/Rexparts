@@ -1,81 +1,81 @@
-import 'dart:developer';
+// ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:rexparts/constants/amin_id.dart';
 import 'package:rexparts/controller/chat_provider.dart';
-import 'package:rexparts/model/user_model.dart';
-import 'package:rexparts/service/chat_service.dart';
+import 'package:rexparts/widget/char_bottom_bar.dart';
 
-TextEditingController messageController = TextEditingController();
+import 'package:rexparts/widget/chat_bubble.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key, this.user});
-  final UserModel? user;
+class ChatScreen extends StatefulWidget {
+  final UserInfor adminInfo;
+  const ChatScreen({
+    super.key,
+    required this.adminInfo,
+  });
 
   @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final getChatPrd = Provider.of<ChatController>(context, listen: false);
+    getChatPrd.getMessages(widget.adminInfo.id);
+
     return Scaffold(
-      body: Stack(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 15, 147, 255),
+        foregroundColor: Colors.white,
+        title: const Text("Chat with me "),
+      ),
+      body: Column(
         children: [
-          Positioned(
-            bottom: 10,
-            left: 5,
-            right: 5,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: TextFormField(
-                      controller: messageController,
-                      style: TextStyle(fontSize: 15, color: Colors.white),
-                      decoration: InputDecoration(
-                        fillColor: Color.fromARGB(255, 19, 25, 35),
-                        filled: true,
-                        hintText: 'Message...',
-                        hintStyle: GoogleFonts.raleway(
-                            color: Colors.white, fontSize: 12),
-                        floatingLabelStyle: TextStyle(color: Colors.white),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    if (messageController.text.isNotEmpty) {
-                      ChatService().sendMessage(
-                        user?.userId ?? adminId,
-                        messageController.text,
-                      );
-                      log(user?.userId ?? '');
-                      log(messageController.text);
-                      messageController.clear();
-                    }
+          Expanded(
+            child: Consumer<ChatController>(
+              builder: (context, value, child) {
+                return ListView.builder(
+                  reverse: true,
+                  itemCount: value.allMessage.length,
+                  itemBuilder: (context, index) {
+                    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+                    bool isSender = value.allMessage[index].senderId ==
+                        firebaseAuth.currentUser!.uid;
+                    DateTime timestamp = value.allMessage[index].timeStamp!;
+                    String formattedTime =
+                        DateFormat('hh:mm a').format(timestamp);
+                    return ChatBubble(
+                      isSent: isSender,
+                      message: value.allMessage[index].message!,
+                      time: formattedTime,
+                      type: value.allMessage[index].type!,
+                    );
                   },
-                  child: CircleAvatar(
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.white,
-                    ),
-                    backgroundColor: Color(0xff02B4BF),
-                    radius: size.height * 0.036,
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
+                );
+              },
             ),
-          )
+          ),
+          ChatBottomBar(
+            chatController: getChatPrd,
+            adminInfo: widget.adminInfo,
+          ),
         ],
       ),
     );
   }
+}
+
+class UserInfor {
+  String id;
+  String fullName;
+  bool isAdmin;
+
+  UserInfor({
+    required this.id,
+    required this.fullName,
+    this.isAdmin = false,
+  });
 }

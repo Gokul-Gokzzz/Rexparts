@@ -1,6 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: prefer_const_declarations
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:rexparts/controller/admin_controller.dart';
@@ -11,20 +13,39 @@ import 'package:rexparts/controller/chat_provider.dart';
 import 'package:rexparts/controller/favoutare_provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
 import 'package:rexparts/controller/order_provider.dart';
+import 'package:rexparts/controller/payment_provider.dart';
 import 'package:rexparts/controller/product_details_provider.dart';
-import 'package:rexparts/controller/reg_provider.dart';
 import 'package:rexparts/controller/user_controller.dart';
-// import 'package:rexparts/controller/user_controller.dart';
 import 'package:rexparts/firebase_options.dart';
-import 'package:rexparts/view/payment_Screen/razorpay.dart';
+import 'package:rexparts/service/firebase_api_service.dart';
+import 'package:rexparts/service/noti_service.dart';
+import 'package:rexparts/view/Admin/add_product.dart';
+import 'package:rexparts/view/notification/notification.dart';
 import 'package:rexparts/view/splash_screen/splash_screen.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    const MyApp(),
+  // await FirebaseApiService().initNotifications();
+  await NotificationService().initNotification();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('logo');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
   );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse: (details) {},
+  );
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -68,13 +89,20 @@ class _MyAppState extends State<MyApp> {
           create: (context) => FavoutareProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ChatProvider(),
+          create: (context) => ChatController(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PaymentProvider(),
         ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
-        // PaymentScreen(),
+        home: const SplashScreen(),
+        navigatorKey: navigatorKey,
+        routes: {
+          '/notification_screen': (context) => const NotificationPage(),
+          '/add_product': (context) => const AddProductPage(),
+        },
       ),
     );
   }

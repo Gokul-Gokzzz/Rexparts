@@ -1,13 +1,12 @@
 // ignore_for_file: unused_local_variable, camel_case_types, unnecessary_null_comparison, avoid_unnecessary_containers
 
-import 'package:enefty_icons/enefty_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
 import 'package:rexparts/controller/favoutare_provider.dart';
 import 'package:rexparts/model/admin_product_model.dart';
-import 'package:rexparts/view/tyre_details/tyre_details.dart';
+import 'package:rexparts/view/product_details/product_details.dart';
 import 'package:rexparts/widget/text_widget.dart';
 
 class Fav extends StatelessWidget {
@@ -42,7 +41,7 @@ class Fav extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                TireDetailPage(product: item)));
+                                ProductDetailPage(product: item)));
                   },
                   child: Card(
                     elevation: 0,

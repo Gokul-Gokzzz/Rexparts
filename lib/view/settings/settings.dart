@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
 
-import 'package:rexparts/view/account/account.dart';
+// import 'package:rexparts/view/account/account.dart';
 import 'package:rexparts/view/help/help.dart';
 import 'package:rexparts/view/order/order.dart';
 import 'package:rexparts/view/terms_condition/terms_condition.dart';
@@ -79,18 +79,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderScreen(),
+                    builder: (context) => const OrderScreen(),
                   ),
                 );
               }),
-              textWidget('Account Information', () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AccountScreen(),
-                  ),
-                );
-              }),
+              // textWidget('Account Information', () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => const AccountScreen(),
+              //     ),
+              //   );
+              // }),
               textWidget('Terms And Condition ', () {
                 Navigator.push(
                   context,
