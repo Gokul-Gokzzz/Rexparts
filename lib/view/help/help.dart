@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
 import 'package:rexparts/view/chat/chat_screen.dart';
 
 class HelpScreen extends StatelessWidget {
@@ -10,11 +9,6 @@ class HelpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserInfor adminInfo = UserInfor(
-      id: 'adminId',
-      fullName: 'Admin Name',
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Help'),
@@ -64,7 +58,7 @@ class HelpScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChatScreen(adminInfo: adminInfo),
+                        builder: (context) => ChatBot(),
                       ),
                     );
                   },

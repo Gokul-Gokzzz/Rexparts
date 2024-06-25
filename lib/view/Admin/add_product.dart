@@ -1,12 +1,12 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
+
+import 'package:rexparts/view/Admin/chat_list.dart';
+import 'package:lottie/lottie.dart';
 
 class AddProductPage extends StatefulWidget {
   const AddProductPage({super.key});
@@ -120,8 +120,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (productProvider.formKey.currentState!.validate()) {
-                      Provider.of<ProductProvider>(context, listen: false)
-                          .addProduct(
+                      productProvider.addProduct(
                         name: productProvider.productNameController.text,
                         category: productProvider.selectedCategory!,
                         description: productProvider.descriptionController.text,
@@ -133,36 +132,31 @@ class _AddProductPageState extends State<AddProductPage> {
                   },
                   child: const Text('Submit'),
                 ),
-                const SizedBox(
-                  height: 150,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text(
-                      'You Have a Message',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => ReceiverChat(),
-                        //   ),
-                        // );
-                      },
-                      child: CircleAvatar(
-                        radius: 20,
-                        child: Lottie.asset('assets/chat.json'),
-                      ),
-                    )
-                  ],
-                )
+                const SizedBox(height: 150),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     const Text(
+                //       'You Have a Message',
+                //       style:
+                //           TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
+                //     ),
+                //     const SizedBox(width: 10),
+                //     GestureDetector(
+                //       onTap: () {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => ChatListScreen()),
+                //         );
+                //       },
+                //       child: CircleAvatar(
+                //         radius: 20,
+                //         child: Lottie.asset('assets/chat.json'),
+                //       ),
+                //     )
+                //   ],
+                // )
               ],
             ),
           ),

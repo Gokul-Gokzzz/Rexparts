@@ -14,20 +14,20 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AdminLoginPage(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.admin_panel_settings))
-        ],
-      ),
+      // appBar: AppBar(
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) => AdminLoginPage(),
+      //             ),
+      //           );
+      //         },
+      //         icon: const Icon(Icons.admin_panel_settings))
+      //   ],
+      // ),
       body: Column(
         children: [
           const Padding(

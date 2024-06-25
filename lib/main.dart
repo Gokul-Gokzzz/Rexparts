@@ -88,9 +88,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => FavoutareProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => ChatController(),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (context) => ChatController(),
+        // ),
         ChangeNotifierProvider(
           create: (context) => PaymentProvider(),
         ),
