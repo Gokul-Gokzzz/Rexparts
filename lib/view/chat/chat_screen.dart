@@ -81,9 +81,10 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:intl/intl.dart';
 import 'package:rexparts/model/chat_model.dart';
+import 'package:rexparts/view/chat/chat_widget.dart';
 
 class ChatBot extends StatefulWidget {
   const ChatBot({super.key});
@@ -97,13 +98,39 @@ class _ChatBotState extends State<ChatBot> {
   static const apiKey = 'AIzaSyBoYH_Qa-p7wnUoeJiulcYFKP-09IlIkmE';
   final model = GenerativeModel(model: "gemini-pro", apiKey: apiKey);
   final List<ModelMessage> prompt = [];
+
+  Future<void> sendMessage() async {
+    final message = promptController.text;
+    setState(() {
+      promptController.clear();
+      prompt.add(
+        ModelMessage(
+          isPrompt: true,
+          message: message,
+          time: DateTime.now(),
+        ),
+      );
+    });
+    final content = [Content.text(message)];
+    final response = await model.generateContent(content);
+    setState(() {
+      prompt.add(
+        ModelMessage(
+          isPrompt: false,
+          message: response.text ?? "",
+          time: DateTime.now(),
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('RexG'),
+        title: const Text('RexG'),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -111,26 +138,24 @@ class _ChatBotState extends State<ChatBot> {
             child: ListView.builder(
               itemCount: prompt.length,
               itemBuilder: (context, index) {
-                return Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [],
-                  ),
+                final message = prompt[index];
+                return userPrompt(
+                  isPrompt: message.isPrompt,
+                  message: message.message,
+                  date: DateFormat('hh:mm a').format(message.time),
                 );
               },
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(25),
+            padding: const EdgeInsets.all(25),
             child: Row(
               children: [
                 Expanded(
                   flex: 20,
                   child: TextField(
                     controller: promptController,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                     ),
@@ -142,10 +167,12 @@ class _ChatBotState extends State<ChatBot> {
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 GestureDetector(
-                  onTap: () {},
-                  child: CircleAvatar(
+                  onTap: () {
+                    sendMessage();
+                  },
+                  child: const CircleAvatar(
                     radius: 29,
                     backgroundColor: Colors.green,
                     child: Icon(

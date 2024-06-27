@@ -12,6 +12,7 @@ import 'package:rexparts/controller/cart_provider.dart';
 import 'package:rexparts/controller/chat_provider.dart';
 import 'package:rexparts/controller/favoutare_provider.dart';
 import 'package:rexparts/controller/login_provider.dart';
+import 'package:rexparts/controller/noti_provider.dart';
 import 'package:rexparts/controller/order_provider.dart';
 import 'package:rexparts/controller/payment_provider.dart';
 import 'package:rexparts/controller/product_details_provider.dart';
@@ -94,13 +95,16 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (context) => PaymentProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),
         navigatorKey: navigatorKey,
         routes: {
-          '/notification_screen': (context) => const NotificationPage(),
+          '/notification_screen': (context) => const NotificationScreen(),
           '/add_product': (context) => const AddProductPage(),
         },
       ),

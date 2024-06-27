@@ -6,7 +6,7 @@ class NotificationModel {
   String? id;
   String? receiverId;
   String? title;
-
+  bool? read;
   String? body;
 
   NotificationModel({
@@ -14,14 +14,16 @@ class NotificationModel {
     this.receiverId,
     this.title,
     this.body,
+    this.read,
   });
 
-  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+  factory NotificationModel.fromJson(String id, Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'],
+      id: id,
       receiverId: json['receiverId'],
       title: json['title'],
       body: json['body'],
+      read: json['read'] ?? false,
     );
   }
 
@@ -31,21 +33,7 @@ class NotificationModel {
       'receiverId': receiverId,
       'title': title,
       'body': body,
+      'read': read
     };
-  }
-
-  static NotificationType _parseNotificationType(String? type) {
-    switch (type) {
-      case 'chat':
-        return NotificationType.chat;
-      case 'product':
-        return NotificationType.course;
-      case 'payment':
-        return NotificationType.payment;
-      case 'review':
-        return NotificationType.review;
-      default:
-        return NotificationType.chat;
-    }
   }
 }

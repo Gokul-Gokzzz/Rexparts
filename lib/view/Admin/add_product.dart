@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:rexparts/controller/admin_controller.dart';
+import 'package:rexparts/controller/noti_provider.dart';
 
 import 'package:rexparts/view/Admin/chat_list.dart';
 import 'package:lottie/lottie.dart';
@@ -118,9 +119,9 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (productProvider.formKey.currentState!.validate()) {
-                      productProvider.addProduct(
+                      await productProvider.addProduct(
                         name: productProvider.productNameController.text,
                         category: productProvider.selectedCategory!,
                         description: productProvider.descriptionController.text,
@@ -128,6 +129,12 @@ class _AddProductPageState extends State<AddProductPage> {
                             double.parse(productProvider.priceController.text),
                         image: productProvider.image,
                       );
+                      await Provider.of<NotificationProvider>(context,
+                              listen: false)
+                          .addNotification(
+                              productName:
+                                  productProvider.productNameController.text,
+                              category: productProvider.selectedCategory!);
                     }
                   },
                   child: const Text('Submit'),
