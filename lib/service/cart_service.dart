@@ -61,4 +61,33 @@ class CartService {
       throw Exception("Error updating isOrder: $e");
     }
   }
+
+  Future<void> addOrder(CartModel order, String cartId) async {
+    try {
+      final orderCollection =
+          cartProduct.doc(cartId).collection('orders').withConverter<CartModel>(
+                fromFirestore: (snapshots, _) =>
+                    CartModel.fromJson(snapshots.data()!),
+                toFirestore: (order, _) => order.toJson(),
+              );
+      await orderCollection.doc(order.id).set(order);
+    } catch (e) {
+      throw Exception("Error adding order: $e");
+    }
+  }
+
+  Future<List<CartModel>> getOrders(String cartId) async {
+    try {
+      final orderCollection =
+          cartProduct.doc(cartId).collection('orders').withConverter<CartModel>(
+                fromFirestore: (snapshots, _) =>
+                    CartModel.fromJson(snapshots.data()!),
+                toFirestore: (order, _) => order.toJson(),
+              );
+      final snapshot = await orderCollection.get();
+      return snapshot.docs.map((doc) => doc.data()).toList();
+    } catch (e) {
+      throw Exception("Error fetching orders: $e");
+    }
+  }
 }

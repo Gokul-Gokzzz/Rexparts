@@ -48,7 +48,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     // Add purchased items to the orders
     var cartProvider = Provider.of<CartProvider>(context, listen: false);
     for (var item in cartProvider.cartItems) {
-      cartProvider.addOrder(item);
+      cartProvider.addOrder(
+        item,
+      );
       cartProvider.updateCart(id: item.id, isOrder: true);
     }
 

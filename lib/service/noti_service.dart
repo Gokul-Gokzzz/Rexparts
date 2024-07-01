@@ -18,7 +18,6 @@ class NotificationService {
   Future<void> initNotification() async {
     AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('logo');
-    // AndroidInitializationSettings('@mipmap/ic_launcher');
 
     var initializationSettingsIOS = DarwinInitializationSettings(
         requestAlertPermission: true,
@@ -77,7 +76,7 @@ class NotificationService {
       String userId = userDoc.id;
       NotificationModel notification = NotificationModel(
         receiverId: userId,
-        title: 'New Doctor Appointed',
+        title: 'New products',
         body: '$productName New product ha been arrived $category',
       );
       await addNotification(notification);

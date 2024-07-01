@@ -68,35 +68,6 @@ class _CartPageState extends State<CartPage> {
                                   Text('Qty:${item.quantity.toString()}'),
                                 ],
                               ),
-                              // GestureDetector(
-                              //   onTap: () {
-                              //     Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => PaymentScreen(
-                              //           productAmount: item.totalPrice,
-                              //           id: item.id,
-                              //         ),
-                              //       ),
-                              //     );
-                              //   },
-                              //   child: Container(
-                              //     height: 40,
-                              //     width: 60,
-                              //     decoration: BoxDecoration(
-                              //       borderRadius: BorderRadius.circular(20),
-                              //       color: const Color.fromARGB(
-                              //           255, 255, 255, 255),
-                              //     ),
-                              //     child: const Center(
-                              //       child: Text(
-                              //         'Buy',
-                              //         style: TextStyle(
-                              //             fontWeight: FontWeight.bold),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                           leading: Image.network(item.imageUrl),
@@ -131,6 +102,18 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                   ),
                                 ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailPage(
+                                          product: item.toProductModel()),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(Icons.edit),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.delete),
